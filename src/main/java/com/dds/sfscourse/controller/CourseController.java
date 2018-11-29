@@ -5,75 +5,61 @@ import com.dds.sfscourse.Exception.ResourceNotFoundException;
 import com.dds.sfscourse.base.ResultBean;
 import com.dds.sfscourse.base.ResultEnum;
 import com.dds.sfscourse.base.ResultHandler;
-import com.dds.sfscourse.entity.Course;
-import com.dds.sfscourse.repo.AdminCourseRepo;
-import com.dds.sfscourse.repo.AdminRoleRepo;
-import com.dds.sfscourse.repo.CourseRepo;
-import com.dds.sfscourse.repo.RoleRepo;
+import com.dds.sfscourse.service.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
-import java.util.Date;
 import java.util.List;
 
-import org.springframework.security.access.prepost.PreAuthorize;
+//import org.springframework.security.access.prepost.PreAuthorize;
 
 @RestController
 @RequestMapping(value = "/course")
 public class CourseController {
     @Autowired
-    private CourseRepo courseRepo;
-
-    @Autowired
-    private RoleRepo roleRepo;
-
-    @Autowired
-    private AdminRoleRepo adminRoleRepo;
-
-    @Autowired
-    private AdminCourseRepo adminCourseRepo;
+    private CourseService courseService;
 
     @GetMapping(value = "")
     ResultBean getCourses(HttpSession session) {
-        List<Course> courseList = courseRepo.findCoursesOverview();
-        return ResultHandler.ok(courseList);
+        List<Integer> integerList = null;//courseDao.findCoursesOverview();
+        return ResultHandler.ok(integerList);
     }
 
     @GetMapping(value = "/{courseId}")
     ResultBean getCourse(HttpSession session, @PathVariable int courseId) {
-        Course course = courseRepo.findCourseDetailByCourseId(courseId);
-        if (course == null)
+        Integer integer = null;//courseDao.findCourseDetailByCourseId(courseId);
+        if (integer == null)
             throw new ResourceNotFoundException();
-        return ResultHandler.ok(course);
+        return ResultHandler.ok(integer);
     }
 
     @PutMapping(value = "")
-    ResultBean addCourse(@RequestBody Course course){
-        Course courseResult = courseRepo.save(course);
-        if(courseResult ==null)
+    ResultBean addCourse(@RequestBody Integer integer){
+        Integer integerResult = null;//courseDao.save(integer);
+        if(integerResult ==null)
             throw new BaseException(ResultEnum.FAIL);
-        return ResultHandler.ok(courseResult);
+        return ResultHandler.ok(integerResult);
     }
 
-    @PreAuthorize("hasAuthority('admin') AND hasAuthority('teacher') AND hasAuthority('ta')")
+    //@PreAuthorize("hasAuthority('admin') AND hasAuthority('teacher') AND hasAuthority('ta')")
     @DeleteMapping(value = "/{courseId}")
     ResultBean deleteCourse(HttpSession session, @PathVariable int courseId) {
-        courseRepo.delete(courseId);
-        Course course = courseRepo.findOne(courseId);
-        if (course != null)
+        //courseDao.delete(courseId);
+        Integer integer = null;//courseDao.findOne(courseId);
+        if (integer != null)
             throw new BaseException(ResultEnum.FAIL);
-        return ResultHandler.ok(course);
+        return ResultHandler.ok(integer);
     }
 
-    @PreAuthorize("hasAuthority('admin') AND hasAuthority('teacher') AND hasAuthority('ta')")
+    //@PreAuthorize("hasAuthority('admin') AND hasAuthority('teacher') AND hasAuthority('ta')")
     @PostMapping(value = "/{courseId}")
-    ResultBean updateCourse(@RequestBody Course course) {
+    ResultBean updateCourse(@RequestBody Integer integer) {
 
-        course.setUpdateTime(new Date().getTime());
-        Course courseResult = courseRepo.save(course);
-        if(courseResult ==null)
+        //integer.setUpdateTime(new Date().getTime());
+        Integer integerResult = null;//courseDao.save(integer);
+        if(integerResult ==null)
             throw new BaseException(ResultEnum.FAIL);
-        return ResultHandler.ok(courseResult);
+        return ResultHandler.ok(integerResult);
     }
 }

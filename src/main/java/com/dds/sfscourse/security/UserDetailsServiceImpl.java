@@ -4,10 +4,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import com.dds.sfscourse.entity.Admin;
-import com.dds.sfscourse.entity.AdminRole;
-import com.dds.sfscourse.repo.AdminRepo;
-import com.dds.sfscourse.repo.AdminRoleRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.core.GrantedAuthority;
@@ -25,16 +21,11 @@ import org.springframework.stereotype.Service;
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Autowired
-    private AdminRepo adminRepo;
-
-    @Autowired
-    private AdminRoleRepo adminRoleRepo;
-
-    @Autowired
     private StringRedisTemplate template;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        /*
         Admin admin = adminRepo.findOne(Integer.parseInt(username));
         if (admin == null) {
             throw new UsernameNotFoundException("该用户不存在");
@@ -55,7 +46,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
         System.out.println(String.format("grantedAuthorities=%s",grantedAuthorities));
 
-        return new JwtUserDetails(admin.getEmail(), admin.getPassword(), admin.getSalt(), grantedAuthorities);
+        return new JwtUserDetails(admin.getEmail(), admin.getPassword(), admin.getSalt(), grantedAuthorities);*/
+        return null;
     }
 
 }

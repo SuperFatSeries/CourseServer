@@ -4,10 +4,8 @@ import com.dds.sfscourse.Exception.BaseException;
 import com.dds.sfscourse.base.ResultBean;
 import com.dds.sfscourse.base.ResultEnum;
 import com.dds.sfscourse.base.ResultHandler;
-import com.dds.sfscourse.dto.StudentCommitDto;
-import com.dds.sfscourse.entity.Homework;
-import com.dds.sfscourse.entity.HomeworkSubmit;
-import com.dds.sfscourse.repo.HomeworkSubmitRepo;
+import com.dds.sfscourse.dao.HomeworkSubmitDao;
+import com.dds.sfscourse.model.HomeworkSubmit;
 import com.dds.sfscourse.service.MongoDBService;
 import com.mongodb.gridfs.GridFSInputFile;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,16 +15,13 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-import org.springframework.security.access.prepost.PreAuthorize;
+//import org.springframework.security.access.prepost.PreAuthorize;
 
 @RestController
 public class HomeworkSubmitController {
-    @Autowired
-    HomeworkSubmitRepo homeworkSubmitRepo;
+    HomeworkSubmitDao homeworkSubmitDao;
 
     @Autowired
     MongoDBService mongoDBService;
@@ -36,19 +31,13 @@ public class HomeworkSubmitController {
         int page=0,pageSize=10;
 
         PageRequest request = new PageRequest(page,pageSize);
-        Homework homework = new Homework();
-        homework.setId(homeworkId);
-        Page<HomeworkSubmit> homeworkSubmitPage = homeworkSubmitRepo.findHomeworkSubmitByHomework(homework,request);
+        //Homework homework = new Homework();
+        //homework.setId(homeworkId);
+        Page<HomeworkSubmit> homeworkSubmitPage = null;//homeworkSubmitDao.findHomeworkSubmitByHomework(homework,request);
 
         List<HomeworkSubmit> homeworkSubmitList = homeworkSubmitPage.getContent();
 
-        List<StudentCommitDto> studentCommitDtoList = new ArrayList<StudentCommitDto>();
-
-        for (HomeworkSubmit submit:homeworkSubmitList){
-            studentCommitDtoList.add(new StudentCommitDto(submit,homeworkSubmitRepo.getCommittedCountByHomeworkIdAndStudentId(submit.getHomework().getId(),submit.getStudent().getId())));
-        }
-
-        return ResultHandler.ok(studentCommitDtoList);
+        return ResultHandler.ok(homeworkSubmitList);
     }
 
     @PutMapping(value = "/course/{courseId}/homework/{homeworkId}/submit")
@@ -65,28 +54,28 @@ public class HomeworkSubmitController {
 
         // TODO: 2018/12/9
 
-        Homework homework = new Homework();
-        homework.setId(homeworkId);
+        //Homework homework = new Homework();
+        //homework.setId(homeworkId);
 
-        return ResultHandler.ok(homework);
+        return ResultHandler.ok(null);
     }
 
-    @PreAuthorize("hasAuthority('admin') AND hasAuthority('teacher') AND hasAuthority('ta')")
+    //@PreAuthorize("hasAuthority('admin') AND hasAuthority('teacher') AND hasAuthority('ta')")
     @DeleteMapping(value = "/course/{courseId}/homework/{homeworkId}/submit/{submit_id}")
     ResultBean deleteHomeworkSubmit(HttpSession session, @PathVariable int courseId, @PathVariable int homeworkId, @PathVariable int submitId) {
-        homeworkSubmitRepo.delete(submitId);
-        HomeworkSubmit homeworkSubmit = homeworkSubmitRepo.findOne(submitId);
+        //homeworkSubmitDao.delete(submitId);
+        HomeworkSubmit homeworkSubmit = null;//homeworkSubmitDao.findOne(submitId);
         if (homeworkSubmit != null)
             throw new BaseException(ResultEnum.FAIL);
         return ResultHandler.ok(homeworkSubmit);
     }
 
-    @PreAuthorize("hasAuthority('admin') AND hasAuthority('teacher') AND hasAuthority('ta')")
+    //@PreAuthorize("hasAuthority('admin') AND hasAuthority('teacher') AND hasAuthority('ta')")
     @PostMapping(value = "/course/{courseId}/homework/{homeworkId}/submit/{submit_id}")
     ResultBean updateHomeworkSubmit(@RequestBody HomeworkSubmit homeworkSubmit) {
 
-        homeworkSubmit.setUpdateTime(new Date().getTime());
-        HomeworkSubmit homeworkSubmitResult = homeworkSubmitRepo.save(homeworkSubmit);
+        //homeworkSubmit.setUpdateTime(new Date().getTime());
+        HomeworkSubmit homeworkSubmitResult = null;// homeworkSubmitDao.save(homeworkSubmit);
         if(homeworkSubmitResult ==null)
             throw new BaseException(ResultEnum.FAIL);
         return ResultHandler.ok(homeworkSubmitResult);
