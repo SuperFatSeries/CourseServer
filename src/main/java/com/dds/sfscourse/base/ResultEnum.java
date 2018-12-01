@@ -6,6 +6,7 @@ public enum ResultEnum {
     EXCEPTION(500, ""),
     NULL_ATTR(101,"属性为空"),
     RESOURCE_NOT_FOUND(404,"未知资源"),
+    RESOURCE_EXIST(405,"资源已存在"),
 
     FORBIDDEN_EXCEPTION(403, "访问禁止"),
 

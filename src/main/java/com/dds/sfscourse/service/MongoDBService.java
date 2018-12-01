@@ -50,12 +50,12 @@ public class MongoDBService {
     /**
      * 据id返回文件
      */
-    public GridFSDBFile getById(ObjectId id){
+    public GridFSDBFile getById(String id){//(ObjectId id){
 
         GridFS gridFS = new GridFS(mongodbfactory.getDb());
 
-        return gridFS.findOne(new BasicDBObject("_id", id));
-
+        //return gridFS.findOne(new BasicDBObject("_id", id));
+        return gridFS.findOne(new ObjectId(id));
     }
 
 

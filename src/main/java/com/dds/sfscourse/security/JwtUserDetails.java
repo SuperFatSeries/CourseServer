@@ -88,4 +88,13 @@ public class JwtUserDetails implements UserDetails {
         return true;
     }
 
+    @Override
+    public String toString() {
+        return "JwtUserDetails{" +
+                "username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", salt='" + salt + '\'' +
+                ", authorities=" + authorities +
+                '}';
+    }
 }

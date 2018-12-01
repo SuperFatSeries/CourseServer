@@ -41,7 +41,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.cors().and().csrf().disable()
                 .authorizeRequests()
                 // /course下所有GET服务均开放权限
-                .regexMatchers(HttpMethod.GET,"/course.*").permitAll()
+                .regexMatchers( "/course.*").permitAll()
+                .regexMatchers( "/course/\\d+/ware.*").permitAll()
+                //.antMatchers("/course/course_id/homework/homework_id/submit").permitAll()
                 // 跨域预检请求
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 // web jars
@@ -49,6 +51,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 // 首页和登录页面
                 .antMatchers("/").permitAll()
                 .antMatchers("/login").permitAll()
+                .antMatchers("/register").permitAll()
+                .antMatchers("/institute").permitAll()
                 .antMatchers(TOKEN_REFRESH_ENTRY_POINT).permitAll()
                 // swagger2
                 .antMatchers("/swagger-ui.html").permitAll()

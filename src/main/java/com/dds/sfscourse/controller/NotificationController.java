@@ -1,61 +1,127 @@
 package com.dds.sfscourse.controller;
 
 import com.dds.sfscourse.Exception.BaseException;
+import com.dds.sfscourse.Exception.ForbiddenException;
+import com.dds.sfscourse.Exception.ResourceExistException;
 import com.dds.sfscourse.Exception.ResourceNotFoundException;
 import com.dds.sfscourse.base.ResultBean;
 import com.dds.sfscourse.base.ResultEnum;
 import com.dds.sfscourse.base.ResultHandler;
-import com.dds.sfscourse.dao.NotificationDao;
-import com.dds.sfscourse.model.Notification;
+import com.dds.sfscourse.config.WebSecurityConfig;
+import com.dds.sfscourse.entity.Course;
+import com.dds.sfscourse.entity.Notification;
+import com.dds.sfscourse.repo.AdminCourseRepo;
+import com.dds.sfscourse.repo.NotificationRepo;
+import com.dds.sfscourse.security.JwtUserDetails;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.util.Date;
 import java.util.List;
 
 @RestController
 public class NotificationController {
-    NotificationDao notificationDao;
+    @Autowired
+    NotificationRepo notificationRepo;
 
-    @GetMapping(value = "/course/{integerId}/notification")
-    ResultBean getNotifications(HttpSession session, @PathVariable Integer integerId) {
-        List<Notification> notificationList = null;// notificationDao.findNotificationsByCourseId(new Integer(integerId));
-        return ResultHandler.ok(notificationList);
+    @Autowired
+    AdminCourseRepo adminCourseRepo;
+
+    //通知列表
+    @GetMapping(value = "/course/{courseId}/notification")
+    ResultBean getNotifications(HttpSession session, @PathVariable Integer courseId,@PageableDefault(value = 10, sort = { "id" }, direction = Sort.Direction.DESC)
+            Pageable pageable){
+        Page<Notification> notificationPage = notificationRepo.findNotificationsByCourseId(courseId,pageable);
+        return ResultHandler.ok(notificationPage);
     }
 
+    //通知详细
     @GetMapping(value = "/course/{courseId}/notification/{notificationId}")
     ResultBean getNotification(HttpSession session, @PathVariable int courseId, @PathVariable int notificationId) {
-        Notification notification = null;//notificationDao.findOne(notificationId);
+        Notification notification = notificationRepo.findNotificationById(notificationId);
         if (notification == null)
             throw new ResourceNotFoundException();
         return ResultHandler.ok(notification);
     }
 
+    //添加通知
+    @PreAuthorize("hasAuthority('admin') OR hasAuthority('teacher') OR hasAuthority('ta')")
     @PutMapping(value = "/course/{courseId}/notification")
-    ResultBean addNotification(@RequestBody Notification notification){
-        Notification notificationResult = null;//notificationDao.save(notification);
+    @ApiImplicitParams({@ApiImplicitParam(name= WebSecurityConfig.JWT_TOKEN_HEADER_PARAM,value="JWT token",required=true,paramType="headers"),})
+    ResultBean addNotification(@PathVariable int courseId,@RequestBody Notification notification){
+        JwtUserDetails jwtUserDetails =
+                (JwtUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Integer admin_id = Integer.parseInt(jwtUserDetails.getUsername());
+
+        //检查admin 管理权限
+        if(adminCourseRepo.findAdminCourseByAdminIdAndCourseId(admin_id,courseId)==null)
+            throw new ForbiddenException();
+
+        assert notification.getId() == null;
+        // TODO: 2018/12/14 合法性判断
+        
+        Notification notificationResult = notificationRepo.save(notification);
         if(notificationResult ==null)
             throw new BaseException(ResultEnum.FAIL);
         return ResultHandler.ok(notificationResult);
     }
 
-    //@PreAuthorize("hasAuthority('admin') AND hasAuthority('teacher') AND hasAuthority('ta')")
+    //修改通知
+    @PreAuthorize("hasAuthority('admin') OR hasAuthority('teacher') OR hasAuthority('ta')")
+    @PostMapping(value = "/course/{courseId}/notification/{notificationId}")
+    @ApiImplicitParams({@ApiImplicitParam(name= WebSecurityConfig.JWT_TOKEN_HEADER_PARAM,value="JWT token",required=true,paramType="headers"),})
+    ResultBean postNotification(HttpSession session, @PathVariable int courseId, @PathVariable int notificationId,@RequestBody Notification notification) {
+        JwtUserDetails jwtUserDetails =
+                (JwtUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Integer admin_id = Integer.parseInt(jwtUserDetails.getUsername());
+
+        //检查admin 管理权限
+        if(adminCourseRepo.findAdminCourseByAdminIdAndCourseId(admin_id,courseId)==null)
+            throw new ForbiddenException();
+
+        Notification notification1 = notificationRepo.findNotificationById(notification.getId());
+
+        if(notification1==null)
+            throw new ResourceNotFoundException();
+
+        if(notification.getTitle()!=null)
+            notification1.setTitle(notification.getTitle());
+
+        if(notification.getContent()!=null)
+            notification1.setContent(notification.getContent());
+
+        // TODO: 2018/12/14 合法性判断
+
+        Notification notificationResult = notificationRepo.save(notification);
+        return ResultHandler.ok(notificationResult);
+    }
+
+    //删除通知
+    @PreAuthorize("hasAuthority('admin') OR hasAuthority('teacher') OR hasAuthority('ta')")
     @DeleteMapping(value = "/course/{courseId}/notification/{notificationId}")
+    @ApiImplicitParams({@ApiImplicitParam(name= WebSecurityConfig.JWT_TOKEN_HEADER_PARAM,value="JWT token",required=true,paramType="headers"),})
     ResultBean deleteCourse(HttpSession session, @PathVariable int courseId, @PathVariable int notificationId) {
-        //notificationDao.delete(notificationId);
-        Notification notification = null;//notificationDao.findOne(notificationId);
-        if (notification != null)
-            throw new BaseException(ResultEnum.FAIL);
-        return ResultHandler.ok(notification);
-    }
+        JwtUserDetails jwtUserDetails =
+                (JwtUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Integer admin_id = Integer.parseInt(jwtUserDetails.getUsername());
 
-    //@PreAuthorize("hasAuthority('admin') AND hasAuthority('teacher') AND hasAuthority('ta')")
-    @PostMapping(value = "/{courseId}")
-    ResultBean updateCourse(@RequestBody Notification notification) {
+        //检查admin 管理权限
+        if(adminCourseRepo.findAdminCourseByAdminIdAndCourseId(admin_id,courseId)==null)
+            throw new ForbiddenException();
 
-        //notification.setUpdateTime(new Date().getTime());
-        Notification notificationResult = null;// notificationDao.save(notification);
-        if(notificationResult ==null)
+        int res = notificationRepo.deleteNotificationById(notificationId);
+        Notification notification = notificationRepo.findNotificationById(notificationId);
+        if (res != 1)
             throw new BaseException(ResultEnum.FAIL);
-        return ResultHandler.ok(notificationResult);
+        return ResultHandler.ok(ResultEnum.SUCCESS);
     }
 }
