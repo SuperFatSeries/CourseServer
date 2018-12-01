@@ -1,0 +1,3 @@
+INSERT INTO simplecourse.admin (id, email, name, password, salt, state, update_time, institute_id) VALUES (1, 'admin@cn', 'admin', '0000', 'admin', 0, 1544552046, 3);
+INSERT INTO simplecourse.admin (id, email, name, password, salt, state, update_time, institute_id) VALUES (2, 'teacher@cn', 'teacher', '0000', 'teacher', 0, 1544552047, 1);
+INSERT INTO simplecourse.admin (id, email, name, password, salt, state, update_time, institute_id) VALUES (3, 'ta@cn', 'ta', '0000', 'ta', 0, 1544552048, 1);

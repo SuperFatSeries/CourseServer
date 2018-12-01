@@ -1,0 +1,3 @@
+INSERT INTO simplecourse.course (id, capacity, info, name, period, state, teacher_name, update_time) VALUES (1, 100, null, '分布式系统', '周一 8~11节', 0, '陈鹏飞', 1544552046000);
+INSERT INTO simplecourse.course (id, capacity, info, name, period, state, teacher_name, update_time) VALUES (2, 150, null, '软工方法论', '周二 1~2节 B103', 0, '周晓聪', 1544550046000);
+INSERT INTO simplecourse.course (id, capacity, info, name, period, state, teacher_name, update_time) VALUES (3, 150, null, '系统分析与设计', '周三 1~2节 C504', 0, '潘茂林', 1544530046000);

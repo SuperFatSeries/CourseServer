@@ -1,0 +1,2 @@
+INSERT INTO simplecourse.student (id, name, state, update_time, institute_id) VALUES (18214470, 'aa', 0, 1544696005000, 1);
+INSERT INTO simplecourse.student (id, name, state, update_time, institute_id) VALUES (18214471, '维明', 0, 1544695820000, 1);

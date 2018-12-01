@@ -1,0 +1,3 @@
+INSERT INTO simplecourse.homework (id, ddl, name, requirement, state, update_time, admin_id, course_id, commit_count) VALUES (1, 1546550046, '第一次作业', '第31周交', 0, 1545550046000, 1, 1, 1);
+INSERT INTO simplecourse.homework (id, ddl, name, requirement, state, update_time, admin_id, course_id, commit_count) VALUES (2, 1556550046, '第二次作业', '第37周交', 0, 1555550046000, 2, 1, 0);
+INSERT INTO simplecourse.homework (id, ddl, name, requirement, state, update_time, admin_id, course_id, commit_count) VALUES (3, 1566550046, '第三次作业', '第40周交', 0, 1565550046000, 3, 1, 0);

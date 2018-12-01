@@ -1,0 +1,3 @@
+INSERT INTO simplecourse.homework_submit (id, file_key, file_name, remark, state, submit_time, update_time, homework_id, student_id) VALUES (1, '5c12300ca3f202399446ff25', 'file', null, 0, 1544695820000, 1544695820000, 1, 18214471);
+INSERT INTO simplecourse.homework_submit (id, file_key, file_name, remark, state, submit_time, update_time, homework_id, student_id) VALUES (2, '5c123095a3f20235b4938edb', 'file', null, 0, 1544695957000, 1544695957000, 1, 18214471);
+INSERT INTO simplecourse.homework_submit (id, file_key, file_name, remark, state, submit_time, update_time, homework_id, student_id) VALUES (3, '5c1230c6a3f20235b4938edd', 'file', null, 0, 1544696006000, 1544696006000, 1, 18214470);

@@ -1,0 +1,5 @@
+INSERT INTO simplecourse.courseware (id, downloads, file_key, file_name, remark, state, update_time, course_id) VALUES (1, 20, 'ttt', 'test.txt', null, 1, 1544550046000, 1);
+INSERT INTO simplecourse.courseware (id, downloads, file_key, file_name, remark, state, update_time, course_id) VALUES (2, 20, '222', 'test2.txt', null, 1, 1544560046000, 1);
+INSERT INTO simplecourse.courseware (id, downloads, file_key, file_name, remark, state, update_time, course_id) VALUES (3, 0, '5c123995a3f2023278f3d6ae', 'fathom-master.zip', '', 1, 1544698261831, 1);
+INSERT INTO simplecourse.courseware (id, downloads, file_key, file_name, remark, state, update_time, course_id) VALUES (4, 0, '5c1239e5a3f2022a14d8e1d7', 'FLCL+Alternative.ass', 'ssss', 1, 1544698341242, 1);
+INSERT INTO simplecourse.courseware (id, downloads, file_key, file_name, remark, state, update_time, course_id) VALUES (5, 0, '5c125980a3f20230987022d6', '70.0.3538.110_chrome_installer.exe', 'Java安装器', 1, 1544706435460, 1);
