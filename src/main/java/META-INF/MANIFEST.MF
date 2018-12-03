@@ -1,0 +1,44 @@
+Manifest-Version: 1.0
+Class-Path: spring-oxm-4.3.14.RELEASE.jar jackson-databind-2.8.10.jar 
+ aspectjweaver-1.8.13.jar spring-expression-4.3.14.RELEASE.jar spring-
+ data-keyvalue-1.2.10.RELEASE.jar spring-plugin-metadata-1.2.0.RELEASE
+ .jar javax.transaction-api-1.2.jar swagger-annotations-1.5.14.jar jav
+ assist-3.21.0-GA.jar commons-pool2-2.4.3.jar spring-boot-starter-1.5.
+ 10.RELEASE.jar spring-boot-starter-jdbc-1.5.10.RELEASE.jar mysql-conn
+ ector-java-5.1.45.jar spring-aop-4.3.14.RELEASE.jar tomcat-jdbc-8.5.2
+ 7.jar jul-to-slf4j-1.7.25.jar jcl-over-slf4j-1.7.25.jar jackson-annot
+ ations-2.8.0.jar springfox-spi-2.8.0.jar spring-boot-starter-web-1.5.
+ 10.RELEASE.jar spring-session-1.3.1.RELEASE.jar swagger-models-1.5.14
+ .jar log4j-over-slf4j-1.7.25.jar spring-context-4.3.14.RELEASE.jar to
+ mcat-embed-el-8.5.27.jar snakeyaml-1.17.jar spring-boot-starter-secur
+ ity-1.5.10.RELEASE.jar dom4j-1.6.1.jar spring-boot-starter-aop-1.5.10
+ .RELEASE.jar validation-api-1.1.0.Final.jar jjwt-0.9.1.jar spring-boo
+ t-starter-data-mongodb-1.5.10.RELEASE.jar springfox-swagger-ui-2.8.0.
+ jar spring-security-core-4.2.4.RELEASE.jar spring-context-support-4.3
+ .14.RELEASE.jar spring-web-4.3.14.RELEASE.jar springfox-schema-2.8.0.
+ jar spring-security-web-4.2.4.RELEASE.jar spring-boot-starter-tomcat-
+ 1.5.10.RELEASE.jar hibernate-validator-5.3.6.Final.jar guava-20.0.jar
+  jackson-core-2.8.10.jar hibernate-core-5.0.12.Final.jar hibernate-co
+ mmons-annotations-5.0.1.Final.jar slf4j-api-1.7.25.jar classmate-1.3.
+ 4.jar mapstruct-1.2.0.Final.jar spring-boot-starter-data-jpa-1.5.10.R
+ ELEASE.jar byte-buddy-1.7.9.jar mongodb-driver-core-3.4.3.jar hiberna
+ te-entitymanager-5.0.12.Final.jar logback-classic-1.1.11.jar antlr-2.
+ 7.7.jar spring-session-data-redis-1.3.0.RELEASE.jar jandex-2.0.0.Fina
+ l.jar jboss-logging-3.3.1.Final.jar spring-boot-starter-data-redis-1.
+ 5.2.RELEASE.jar logback-core-1.1.11.jar spring-boot-starter-logging-1
+ .5.10.RELEASE.jar spring-aspects-4.3.14.RELEASE.jar spring-boot-autoc
+ onfigure-1.5.10.RELEASE.jar spring-data-mongodb-1.10.10.RELEASE.jar s
+ pringfox-swagger-common-2.8.0.jar spring-orm-4.3.14.RELEASE.jar sprin
+ g-security-config-4.2.4.RELEASE.jar spring-tx-4.3.14.RELEASE.jar spri
+ ng-core-4.3.14.RELEASE.jar spring-beans-4.3.14.RELEASE.jar spring-web
+ mvc-4.3.14.RELEASE.jar spring-boot-1.5.10.RELEASE.jar bson-3.4.3.jar 
+ hibernate-jpa-2.1-api-1.0.0.Final.jar springfox-swagger2-2.8.0.jar sp
+ ring-plugin-core-1.2.0.RELEASE.jar springfox-spring-web-2.8.0.jar spr
+ ing-jdbc-4.3.14.RELEASE.jar spring-data-commons-1.13.10.RELEASE.jar s
+ pring-data-jpa-1.11.10.RELEASE.jar mongodb-driver-3.4.3.jar tomcat-ju
+ li-8.5.27.jar jedis-2.9.0.jar tomcat-embed-websocket-8.5.27.jar tomca
+ t-annotations-api-8.5.27.jar tomcat-embed-core-8.5.27.jar spring-data
+ -redis-1.8.10.RELEASE.jar reflections-0.9.11.jar springfox-core-2.8.0
+ .jar
+Main-Class: com.dds.sfscourse.SfscourseApplication
+

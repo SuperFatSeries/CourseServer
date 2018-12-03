@@ -61,7 +61,7 @@ public class CoursewareController {
 
     //课件列表
     @GetMapping(value = "/course/{courseId}/ware")
-    ResultBean getCoursewares(HttpSession session, @PathVariable int courseId,@PageableDefault(value = 10, sort = { "id" }, direction = Sort.Direction.DESC)
+    ResultBean getCoursewares(HttpSession session, @PathVariable int courseId,@PageableDefault(value = 100, sort = { "id" }, direction = Sort.Direction.DESC)
             Pageable pageable){
         //int page=0,pageSize=10;
         Page<Courseware> coursewarePage = coursewareRepo.findCoursewaresByCourseId(courseId,pageable);
