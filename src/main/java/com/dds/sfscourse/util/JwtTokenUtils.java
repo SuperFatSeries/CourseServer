@@ -2,6 +2,7 @@ package com.dds.sfscourse.util;
 
 import com.dds.sfscourse.security.GrantedAuthorityImpl;
 import com.dds.sfscourse.security.JwtAuthenticationToken;
+import com.dds.sfscourse.security.JwtUserDetails;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 
@@ -94,6 +95,9 @@ public class JwtTokenUtils implements Serializable {
         Authentication authentication = null;
         // 获取请求携带的令牌
         String token = JwtTokenUtils.getToken(request);
+
+        System.out.println("getAuthenticationeFromToken :"+token);
+
         if(token != null) {
             // 请求令牌不能为空
             if(SecurityUtils.getAuthentication() == null) {
@@ -110,20 +114,26 @@ public class JwtTokenUtils implements Serializable {
                     return null;
                 }
                 Object authors = claims.get(AUTHORITIES);
-                List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
+                List<GrantedAuthorityImpl> authorities = new ArrayList<>();
                 if (authors != null && authors instanceof List) {
                     for (Object object : (List) authors) {
                         authorities.add(new GrantedAuthorityImpl((String) ((Map) object).get("authority")));
                     }
                }
-                authentication = new JwtAuthenticationToken(username, null, authorities, token);
+                JwtUserDetails jwtUserDetails = new JwtUserDetails(username,authorities);
+                authentication = new JwtAuthenticationToken(jwtUserDetails, null, authorities, token);
+                System.out.println("authentication1 :"+authentication);
             } else {
                 if(validateToken(token, SecurityUtils.getUsername())) {
                     // 如果上下文中Authentication非空，且请求令牌合法，直接返回当前登录认证信息
                     authentication = SecurityUtils.getAuthentication();
                 }
+                System.out.println("authentication2 :"+authentication);
             }
         }
+
+
+
         return authentication;
     }
 

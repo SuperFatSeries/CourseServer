@@ -12,22 +12,31 @@ import com.dds.sfscourse.entity.Homework;
 import com.dds.sfscourse.entity.HomeworkSubmit;
 import com.dds.sfscourse.entity.Student;
 import com.dds.sfscourse.repo.AdminCourseRepo;
+import com.dds.sfscourse.repo.HomeworkRepo;
 import com.dds.sfscourse.repo.HomeworkSubmitRepo;
 import com.dds.sfscourse.repo.StudentRepo;
 import com.dds.sfscourse.security.JwtUserDetails;
 import com.dds.sfscourse.service.MongoDBService;
+import com.mongodb.gridfs.GridFSDBFile;
 import com.mongodb.gridfs.GridFSInputFile;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.InputStreamSource;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -37,6 +46,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 
 @RestController
 public class HomeworkSubmitController {
+    @Autowired
+    HomeworkRepo homeworkRepo;
+
     @Autowired
     HomeworkSubmitRepo homeworkSubmitRepo;
 
@@ -91,6 +103,19 @@ public class HomeworkSubmitController {
                                  @RequestParam(value = "student_id") String studentId,
                                  @RequestParam(value = "name") String name,
                                  @RequestParam(value = "remark") String remark){
+        Long uploadTime = new Date().getTime();
+        Homework homework = homeworkRepo.findOne(homeworkId);
+        if(homework == null)
+            throw new ResourceNotFoundException();
+
+        Long ddl = homework.getDdl().getTime();
+
+        System.out.println(String.format("ddl= %d uploadTime = %d",ddl,uploadTime));
+
+
+        if(ddl<uploadTime)
+            throw new BaseException(ResultEnum.DEADLINE);
+
         System.out.println("putHomework");
         Student student = studentRepo.findStudentById(Integer.parseInt(studentId));
 
@@ -103,7 +128,6 @@ public class HomeworkSubmitController {
             studentRepo.save(student);
         }
         System.out.println(String.format("student={%s} created, upload={%s}", studentId,file.getOriginalFilename()));
-        Long uploadTime = new Date().getTime();
 
         System.out.println(String.format("save upload={%s} to mongodb", studentId,file.getOriginalFilename()));
         GridFSInputFile homeworkSubmitFile = mongoDBService.save(file);
@@ -120,9 +144,9 @@ public class HomeworkSubmitController {
         //homeworkSubmit.setCreateTime(uploadTime);
         //homeworkSubmit.setUpdateTime(uploadTime);
 
-        homeworkSubmitRepo.save(homeworkSubmit);
+        HomeworkSubmit homeworkSubmitRes = homeworkSubmitRepo.save(homeworkSubmit);
 
-        HomeworkSubmit homeworkSubmitRes = homeworkSubmitRepo.findHomeworkSubmitById(Integer.parseInt(studentId));
+        //HomeworkSubmit homeworkSubmitRes = homeworkSubmitRepo.findHomeworkSubmitById(Integer.parseInt(studentId));
 
         if(homeworkSubmitRes==null){
             throw new BaseException(ResultEnum.FILE_UPLOAD_FAIL);
@@ -178,4 +202,35 @@ public class HomeworkSubmitController {
             throw new BaseException(ResultEnum.FAIL);
         return ResultHandler.ok(homeworkSubmitResult);
     }*/
+
+    //下载作业
+    ///@PreAuthorize("hasAuthority('admin') OR hasAuthority('teacher') OR hasAuthority('ta')")
+    //@ApiImplicitParams({@ApiImplicitParam(name= WebSecurityConfig.JWT_TOKEN_HEADER_PARAM,value="JWT token",required=true,paramType="headers"),})
+    @GetMapping(value = "/course/{courseId}/homework/{homeworkId}/submit/{summitId}/download")
+    ResponseEntity<InputStreamSource> downloadHomeworkSubmit(HttpSession session,@PathVariable int courseId, @PathVariable int homeworkId, @PathVariable int summitId) throws IOException {
+        HomeworkSubmit homeworkSubmit = homeworkSubmitRepo.findOne(summitId);
+        if(homeworkSubmit==null)
+            throw new ResourceNotFoundException();
+
+
+
+        //下载文件
+        GridFSDBFile gridFSDBFile = mongoDBService.getById(homeworkSubmit.getFileKey());
+        if (gridFSDBFile == null)
+            throw new ResourceNotFoundException();
+
+        //File file = new File("C:\\git\\test.txt");
+        //InputStreamResource resource = //new InputStreamResource(new FileInputStream(file));
+        InputStream inputStream = gridFSDBFile.getInputStream();
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Cache-Control", "no-cache, no-store, must-revalidate");
+        headers.add("Pragma", "no-cache");
+        headers.add("Expires", "0");
+        headers.add("Content-Disposition", "attachment;fileName=" + gridFSDBFile.getFilename());
+        return ResponseEntity.ok()
+                .headers(headers)
+                .contentLength(gridFSDBFile.getLength())
+                .contentType(MediaType.parseMediaType(gridFSDBFile.getContentType()))
+                .body(new InputStreamResource(gridFSDBFile.getInputStream()));
+    }
 }

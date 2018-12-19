@@ -64,7 +64,7 @@ public class InstituteController {
     @PreAuthorize("hasAuthority('admin')")
     @PostMapping(value = "/institute/{instituteId}")
     @ApiImplicitParams({@ApiImplicitParam(name= WebSecurityConfig.JWT_TOKEN_HEADER_PARAM,value="JWT token",required=true,paramType="headers"),})
-    ResultBean postInstitute(@PathVariable int studentId, @RequestBody Institute institute) {
+    ResultBean postInstitute(@RequestBody Institute institute) {
         if(instituteRepo.findInstituteById(institute.getId())==null)
             throw new ResourceNotFoundException();
 

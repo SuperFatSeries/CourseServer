@@ -51,4 +51,17 @@ public class Admin extends AbstracEntity{
     public Admin() {
         super();
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public Institute getInstitute() {
+        return institute;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
 }

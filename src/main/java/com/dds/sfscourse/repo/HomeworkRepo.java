@@ -9,14 +9,19 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 public interface HomeworkRepo extends JpaRepository<Homework,Integer> {
     Page<Homework> findHomeworkByCourse(Course course, Pageable pageable);
 
     @Query("SELECT new Homework (homework.id, homework.name, homework.ddl, homework.course, homework.admin, homework.requirement, homework.commitCount) FROM Homework homework WHERE homework.course.id = ?1 AND homework.valid = 1")
-    Homework findHomeworkDetailByCourseId(Integer course_id);
+    List<Homework> findHomeworksByCourseId(Integer course_id);
 
     @Query("SELECT new Homework (homework.id, homework.name, homework.ddl, homework.course, homework.admin, homework.requirement, homework.commitCount) FROM Homework homework WHERE homework.id = ?1 AND homework.valid = 1")
-    Homework findHomeworkDetailByHomeworkId(Integer id);
+    Homework findHomeworkDetailByHomeworkId(Integer homeworkId);
+
+    @Query("SELECT COUNT(homework.id) FROM Homework homework WHERE homework.course.id = ?1 AND homework.valid = 1")
+    Integer findHomeworkCountByCourseId(Integer course_id);
 
     @Modifying
     @Transactional

@@ -8,9 +8,11 @@ import com.dds.sfscourse.base.ResultBean;
 import com.dds.sfscourse.base.ResultEnum;
 import com.dds.sfscourse.base.ResultHandler;
 import com.dds.sfscourse.config.WebSecurityConfig;
+import com.dds.sfscourse.dto.CourseInfoDto;
 import com.dds.sfscourse.entity.Admin;
 import com.dds.sfscourse.entity.AdminCourse;
 import com.dds.sfscourse.entity.Course;
+import com.dds.sfscourse.entity.Homework;
 import com.dds.sfscourse.repo.*;
 import com.dds.sfscourse.security.JwtUserDetails;
 import io.swagger.annotations.ApiImplicitParam;
@@ -25,6 +27,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.util.Date;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/course")
@@ -44,6 +48,15 @@ public class CourseController {
     @Autowired
     private StudentCourseRepo studentCourseRepo;
 
+    @Autowired
+    private CoursewareRepo coursewareRepo;
+
+    @Autowired
+    private HomeworkRepo homeworkRepo;
+
+    @Autowired
+    private HomeworkSubmitRepo homeworkSubmitRepo;
+
     //课程列表
     @GetMapping(value = "")
     ResultBean getCourses(HttpSession session,@PageableDefault(value = 10, sort = { "id" }, direction = Sort.Direction.DESC)
@@ -60,6 +73,29 @@ public class CourseController {
         if (course == null)
             throw new ResourceNotFoundException();
         return ResultHandler.ok(course);
+    }
+
+    //课程信息+统计信息
+    @GetMapping(value = "/{courseId}/info")
+    ResultBean getCourseInfo(HttpSession session, @PathVariable Integer courseId) {
+        Course course = courseRepo.findCourseDetailByCourseId(courseId);
+        if (course == null)
+            throw new ResourceNotFoundException();
+
+        List<Homework> homeworkList = homeworkRepo.findHomeworksByCourseId(courseId);
+
+        int dated_count = 0;
+        Date now = new Date();
+
+
+        for (Homework homework:homeworkList
+             ) {
+            if(now.after(homework.getDdl()))
+                dated_count++;
+        }
+
+
+        return ResultHandler.ok(new CourseInfoDto(coursewareRepo.findCoursewareCountByCourseId(courseId),dated_count,homeworkRepo.findHomeworkCountByCourseId(courseId),homeworkSubmitRepo.findHomeworkSubmitCountByCourseId(courseId)));
     }
 
     //新增课程

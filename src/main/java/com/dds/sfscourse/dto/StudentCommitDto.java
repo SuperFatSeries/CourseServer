@@ -7,6 +7,8 @@ import java.math.BigInteger;
 import java.util.Date;
 
 public class StudentCommitDto {
+    @JsonProperty(value = "id")
+    private Integer id;
 
     @JsonProperty(value = "student_id")
     private Integer studentId;
@@ -22,6 +24,9 @@ public class StudentCommitDto {
 
     @JsonProperty(value = "commit_count")
     private Integer commitCount;
+
+    @JsonProperty(value = "remark")
+    private String remark;
 
     public StudentCommitDto(Integer studentId, String studentName, String fileName, Date updateTime, Integer commitCount) {
         this.studentId = studentId;
@@ -47,19 +52,25 @@ public class StudentCommitDto {
         for(int i=0;i<objects.length;i++){
             switch (i){
                 case 0:
-                    this.studentId = ((BigInteger)objects[i]).intValue();
+                    this.id = ((BigInteger)objects[i]).intValue();
                     break;
                 case 1:
-                    this.studentName = (String) objects[i];
+                    this.studentId = ((BigInteger)objects[i]).intValue();
                     break;
                 case 2:
-                    this.fileName = (String) objects[i];
+                    this.studentName = (String) objects[i];
                     break;
                 case 3:
-                    this.commitCount = ((BigInteger)objects[i]).intValue();
+                    this.fileName = (String) objects[i];
                     break;
                 case 4:
-                    this.updateTime = new Date(((BigInteger)objects[i]).longValue());
+                    this.commitCount = ((BigInteger)objects[i]).intValue();
+                    break;
+                case 5:
+                    this.updateTime = new Date();//(((BigInteger)objects[i]).longValue());
+                    break;
+                case 6:
+                    this.remark = (String) objects[i];//(((BigInteger)objects[i]).longValue());
                     break;
             }
         }
@@ -74,6 +85,7 @@ public class StudentCommitDto {
         this.fileName = homeworkSubmit.getFileName();
         this.updateTime = homeworkSubmit.getLastModifiedTime();
         this.commitCount = commitCount;
+        this.remark = homeworkSubmit.getRemark();
     }
 
     public Integer getStudentId() {
@@ -114,6 +126,22 @@ public class StudentCommitDto {
 
     public void setCommitCount(Integer commitCount) {
         this.commitCount = commitCount;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 
     @Override

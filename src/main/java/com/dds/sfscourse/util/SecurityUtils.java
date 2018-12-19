@@ -49,6 +49,7 @@ public class SecurityUtils {
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 
+
     /**
      * 获取当前用户名
      * @return

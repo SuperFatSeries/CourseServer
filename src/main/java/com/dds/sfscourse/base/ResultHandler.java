@@ -1,5 +1,7 @@
 package com.dds.sfscourse.base;
 
+import com.dds.sfscourse.Exception.BaseException;
+
 public class ResultHandler {
     /**
      * 成功时将object对象转化为ResultBean对象
@@ -10,6 +12,29 @@ public class ResultHandler {
     public static ResultBean ok(Object o) {
 
         return new ResultBean(ResultEnum.SUCCESS.getCode(), ResultEnum.SUCCESS.getMsg(), o);
+    }
+
+
+    /**
+     * 成功时将object对象转化为ResultBean对象
+     *
+     * @param message
+     * @return
+     */
+    public static ResultBean ok(ResultEnum message) {
+
+        return new ResultBean(message.getCode(), message.getMsg(), message);
+    }
+
+
+    /**
+     * 使用枚举列举错误类型
+     *
+     * @param e
+     * @return
+     */
+    public static ResultBean error(BaseException e) {
+        return new ResultBean(e.getCode(),e.getMessage(), null);
     }
 
     /**

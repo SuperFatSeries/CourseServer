@@ -17,7 +17,10 @@ public enum ResultEnum {
 
     FILE_UPLOAD_FAIL(1000,"文件上传失败"),
 
-    FILE_DELETE_FAIL(1001,"文件删除失败");
+    FILE_DELETE_FAIL(1001,"文件删除失败"),
+
+    DEADLINE(1002,"作业提交已截止");
+
     private int code;
     private String msg;
 

@@ -34,4 +34,7 @@ public class Notification extends AbstracEntity{
         super();
     }
 
+    public void setCourse(Course course) {
+        this.course = course;
+    }
 }

@@ -56,7 +56,9 @@ public class StudentController {
         if(studentRepo.findStudentById(student.getId())!=null)
             throw new ResourceExistException();
 
+
         // TODO: 2018/12/14 合法性判断
+        //System.out.println("");
 
         Student studentResult = studentRepo.save(student);
         if(studentResult ==null)

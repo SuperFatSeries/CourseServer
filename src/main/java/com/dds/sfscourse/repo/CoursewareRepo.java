@@ -20,6 +20,9 @@ public interface CoursewareRepo extends JpaRepository<Courseware,Integer> {
     @Query(value = "FROM Courseware courseware WHERE courseware.id = ?1 AND courseware.valid = 1")
     Courseware findCoursewaresById(Integer courseId);
 
+    @Query(value = "SELECT COUNT(courseware.id) FROM Courseware courseware WHERE courseware.course.id = ?1 AND courseware.valid = 1")
+    Integer findCoursewareCountByCourseId(Integer courseId);
+
     @Modifying
     @Transactional
     @Query(value = "UPDATE Courseware cw SET cw.valid = 0 WHERE cw.id = ?1 AND cw.valid = 1")

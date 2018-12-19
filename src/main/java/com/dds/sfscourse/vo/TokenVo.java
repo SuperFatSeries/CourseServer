@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.List;
 
 public class TokenVo {
+    private String name;
     private String token;
     private List<String> authorities;
 
@@ -17,6 +18,16 @@ public class TokenVo {
         for (GrantedAuthority  grantedAuthority: jwtAuthenticationToken.getAuthoritiesString()){
             authorities.add(grantedAuthority.getAuthority());
         }
+        //this.name = jwtAuthenticationToken.getName();
+    }
+    public TokenVo(JwtAuthenticationToken jwtAuthenticationToken,String name) {
+        this.token = jwtAuthenticationToken.getToken();
+        this.authorities = new ArrayList<String>();
+        for (GrantedAuthority  grantedAuthority: jwtAuthenticationToken.getAuthoritiesString()){
+            authorities.add(grantedAuthority.getAuthority());
+        }
+        this.name = name;
+        //this.name = jwtAuthenticationToken.getName();
     }
 
     public TokenVo() {
@@ -28,6 +39,14 @@ public class TokenVo {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public List<String> getAuthorities() {

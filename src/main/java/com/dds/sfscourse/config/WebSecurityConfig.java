@@ -43,6 +43,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 // /course下所有GET服务均开放权限
                 .regexMatchers( "/course.*").permitAll()
                 .regexMatchers( "/course/\\d+/ware.*").permitAll()
+                //.regexMatchers( "/course/\\d+/homework/\\d+/submit/\\d/").permitAll()
                 //.antMatchers("/course/course_id/homework/homework_id/submit").permitAll()
                 // 跨域预检请求
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()

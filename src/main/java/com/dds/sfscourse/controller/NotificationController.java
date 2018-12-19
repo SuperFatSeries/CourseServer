@@ -11,6 +11,7 @@ import com.dds.sfscourse.config.WebSecurityConfig;
 import com.dds.sfscourse.entity.Course;
 import com.dds.sfscourse.entity.Notification;
 import com.dds.sfscourse.repo.AdminCourseRepo;
+import com.dds.sfscourse.repo.CourseRepo;
 import com.dds.sfscourse.repo.NotificationRepo;
 import com.dds.sfscourse.security.JwtUserDetails;
 import io.swagger.annotations.ApiImplicitParam;
@@ -36,11 +37,15 @@ public class NotificationController {
     @Autowired
     AdminCourseRepo adminCourseRepo;
 
+    @Autowired
+    CourseRepo courseRepo;
+
     //通知列表
     @GetMapping(value = "/course/{courseId}/notification")
     ResultBean getNotifications(HttpSession session, @PathVariable Integer courseId,@PageableDefault(value = 10, sort = { "id" }, direction = Sort.Direction.DESC)
             Pageable pageable){
         Page<Notification> notificationPage = notificationRepo.findNotificationsByCourseId(courseId,pageable);
+        System.out.println("JWT:" + SecurityContextHolder.getContext().getAuthentication());
         return ResultHandler.ok(notificationPage);
     }
 
@@ -68,6 +73,8 @@ public class NotificationController {
 
         assert notification.getId() == null;
         // TODO: 2018/12/14 合法性判断
+
+        notification.setCourse(courseRepo.findCourseDetailByCourseId(courseId));
         
         Notification notificationResult = notificationRepo.save(notification);
         if(notificationResult ==null)
@@ -85,6 +92,9 @@ public class NotificationController {
         Integer admin_id = Integer.parseInt(jwtUserDetails.getUsername());
 
         //检查admin 管理权限
+        //if(jwtUserDetails.getAuthorities().contains()){
+
+        //}
         if(adminCourseRepo.findAdminCourseByAdminIdAndCourseId(admin_id,courseId)==null)
             throw new ForbiddenException();
 

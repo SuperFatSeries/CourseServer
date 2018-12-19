@@ -33,7 +33,7 @@ public class Homework extends AbstracEntity{
 
     @JsonProperty(value = "commit_count")
     @Column(nullable = false)
-    private Integer commitCount;
+    private Integer commitCount = 0;
 
 
     public Homework(Integer id, String name, Date ddl, Course course, Admin admin, String requirement, Integer commitCount) {

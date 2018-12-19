@@ -21,6 +21,11 @@ public class JwtUserDetails implements UserDetails {
     private String salt;
     private Collection<? extends GrantedAuthority> authorities;
 
+    public JwtUserDetails(String username, Collection<? extends GrantedAuthority> authorities) {
+        this.username = username;
+        this.authorities = authorities;
+    }
+
     JwtUserDetails(String username, String password, String salt, Collection<? extends GrantedAuthority> authorities) {
         this.username = username;
         this.password = password;

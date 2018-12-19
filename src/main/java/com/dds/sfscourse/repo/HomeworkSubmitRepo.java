@@ -13,8 +13,8 @@ import java.util.List;
 public interface HomeworkSubmitRepo extends JpaRepository<HomeworkSubmit,Integer>, JpaSpecificationExecutor {
 
     // TODO: 2018/12/13 复杂（取最新的update_time Group by student_id）查询暂时不知道如何实现 
-    @Query(value = "SELECT h_s.student_id,s.name,h_s.file_name,h_s.commit_count,h_s.update_time " +
-            "           FROM (SELECT ANY_VALUE(student_id) AS student_id ,ANY_VALUE(file_name) AS file_name,MAX(last_modified_time) AS update_time,COUNT(*) AS commit_count " +
+    @Query(value = "SELECT h_s.id,h_s.student_id,s.name,h_s.file_name,h_s.commit_count,h_s.update_time,h_s.remark " +
+            "           FROM (SELECT ANY_VALUE(id) AS id,ANY_VALUE(remark) AS remark,ANY_VALUE(student_id) AS student_id ,ANY_VALUE(file_name) AS file_name,MAX(last_modified_time) AS update_time,COUNT(*) AS commit_count " +
             "FROM homework_submit " +
             "WHERE homework_id = ?1 AND valid = 1 GROUP BY student_id) AS h_s " +
             "LEFT JOIN student AS s ON s.id = h_s.student_id",nativeQuery = true)
@@ -23,6 +23,9 @@ public interface HomeworkSubmitRepo extends JpaRepository<HomeworkSubmit,Integer
 
     @Query(value = "FROM HomeworkSubmit hs WHERE hs.student.id = ?1 AND hs.valid = 1")
     HomeworkSubmit findHomeworkSubmitById(Integer studentId);
+
+    @Query(value = "SELECT COUNT(hs.id) FROM HomeworkSubmit hs WHERE hs.homework.course.id = ?1 AND hs.valid = 1")
+    Integer findHomeworkSubmitCountByCourseId(Integer courseId);
 
     @Modifying
     @Transactional

@@ -22,6 +22,14 @@ public class HomeworkDto {
 
     private Short capacity;
 
+    private Integer createdBy;
+
+    private Date createdTime = new Date();
+
+    private Integer lastModifiedBy;
+
+    private Date lastModifiedTime = new Date();
+
     public HomeworkDto(Integer id, String name, Date ddl, String teacherName, String requirement, Integer commitCount) {
         this.id = id;
         this.name = name;
@@ -39,6 +47,10 @@ public class HomeworkDto {
         this.requirement = homework.getRequirement();
         this.commitCount = homework.getCommitCount();
         this.capacity = homework.getCourse().getCapacity();
+        this.createdBy = homework.getCreatedBy();
+        this.createdTime = homework.getCreatedTime();
+        this.lastModifiedBy = homework.getLastModifiedBy();
+        this.lastModifiedTime = homework.getLastModifiedTime();
     }
 
     public HomeworkDto(Homework homework, Integer commitCount) {
@@ -49,6 +61,11 @@ public class HomeworkDto {
         this.requirement = homework.getRequirement();
         this.capacity = homework.getCourse().getCapacity();
         this.commitCount = commitCount;
+
+        this.createdBy = homework.getCreatedBy();
+        this.createdTime = homework.getCreatedTime();
+        this.lastModifiedBy = homework.getLastModifiedBy();
+        this.lastModifiedTime = homework.getLastModifiedTime();
     }
 
     public Integer getId() {
@@ -107,6 +124,38 @@ public class HomeworkDto {
         this.capacity = capacity;
     }
 
+
+    public Integer getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(Integer createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public Date getCreatedTime() {
+        return createdTime;
+    }
+
+    public void setCreatedTime(Date createdTime) {
+        this.createdTime = createdTime;
+    }
+
+    public Integer getLastModifiedBy() {
+        return lastModifiedBy;
+    }
+
+    public void setLastModifiedBy(Integer lastModifiedBy) {
+        this.lastModifiedBy = lastModifiedBy;
+    }
+
+    public Date getLastModifiedTime() {
+        return lastModifiedTime;
+    }
+
+    public void setLastModifiedTime(Date lastModifiedTime) {
+        this.lastModifiedTime = lastModifiedTime;
+    }
 
     @Override
     public String toString() {

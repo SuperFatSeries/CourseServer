@@ -11,6 +11,7 @@ import com.dds.sfscourse.dto.HomeworkDto;
 import com.dds.sfscourse.entity.Course;
 import com.dds.sfscourse.entity.Homework;
 import com.dds.sfscourse.repo.AdminCourseRepo;
+import com.dds.sfscourse.repo.CourseRepo;
 import com.dds.sfscourse.repo.HomeworkRepo;
 import com.dds.sfscourse.repo.HomeworkSubmitRepo;
 import com.dds.sfscourse.security.GrantedAuthorityImpl;
@@ -48,6 +49,9 @@ public class HomeworkController {
     @Autowired
     MongoDBService mongoDBService;
 
+    @Autowired
+    CourseRepo courseRepo;
+
     //作业列表
     @GetMapping(value = "/course/{courseId}/homework")
     ResultBean getHomeworks(HttpSession session, @PathVariable Integer courseId,@PageableDefault(value = 10, sort = { "id" }, direction = Sort.Direction.DESC)
@@ -73,7 +77,10 @@ public class HomeworkController {
     //作业详细
     @GetMapping(value = "/course/{courseId}/homework/{homeworkId}")
     ResultBean getHomework(HttpSession session, @PathVariable int courseId, @PathVariable int homeworkId) {
-        Homework homework = homeworkRepo.findHomeworkDetailByHomeworkId(homeworkId);
+
+        System.out.println("homeworkId="+homeworkId);
+
+        Homework homework = homeworkRepo.findOne(homeworkId);
         if (homework == null)
             throw new ResourceNotFoundException();
         return ResultHandler.ok(new HomeworkDto(homework));
@@ -94,6 +101,9 @@ public class HomeworkController {
             throw new ForbiddenException();
 
         assert homework.getId()==null;
+
+        homework.setCourse(courseRepo.findCourseDetailByCourseId(courseId));
+
         Homework homeworkResult = homeworkRepo.save(homework);
         if(homeworkResult ==null)
             throw new BaseException(ResultEnum.FAIL);
