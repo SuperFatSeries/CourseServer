@@ -1,10 +1,18 @@
 # SFSCourse Server
 
-## Based on:
+## Base
 - `SpringBoot` `JPA` `Spring Security`
 - `MongoDB`
 - `MySQL`
 - `JWT`
+
+## Requirement
+- `JDK 1.8`
+
+## Usage
+```
+java -jar sfscourse.jar  # 暂未编译
+```
 
 ## Structure:
 ```
