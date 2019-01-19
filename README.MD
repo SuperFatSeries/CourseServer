@@ -1,3 +1,7 @@
 # SFSCourse Server
 
-## deploy 
+## Based on:
+- `SpringBoot` `JPA` `Spring Security`
+- `MongoDB`
+- `MySQL`
+- `JWT`
