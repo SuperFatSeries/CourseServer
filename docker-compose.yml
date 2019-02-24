@@ -1,0 +1,55 @@
+version : '2'
+services:
+
+  sfs-mysql:
+    container_name: sfs-mysql
+    image: mysql/mysql-server:5.7
+    environment:
+      MYSQL_DATABASE: sfscourse
+      MYSQL_ROOT_PASSWORD: root#0
+      MYSQL_PASSWORD: root#0
+      MYSQL_ROOT_HOST: '%'
+    ports:
+      - "3310:3306"
+    restart: always
+    networks:
+      - net-sfscourse
+
+  sfs-mongo:
+    container_name: sfs-mongo
+    image: bitnami/mongodb:latest
+    environment:
+      MONGODB_ROOT_PASSWORD: root#0
+    ports:
+      - "27010:27017"
+    restart: always
+    networks:
+        - net-sfscourse
+
+  sfs-redis:
+    container_name: sfs-redis
+    image: redis
+    ports:
+      - "6310:6379"
+    restart: always
+    networks:
+        - net-sfscourse
+
+  sfs-course-server:
+    container_name: sfs-course-server
+    image: liaowm5/sfs-course-server
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    depends_on:
+      - sfs-mysql
+      - sfs-mongo
+      - sfs-redis
+    ports:
+      - "7991:7991"
+    restart: always
+    networks:
+      - net-sfscourse
+
+networks:
+  net-sfscourse:
+    driver: bridge

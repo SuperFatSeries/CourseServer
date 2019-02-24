@@ -9,16 +9,18 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.dds</groupId>
-    <artifactId>sfscourse</artifactId>
+    <artifactId>sfs-course</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
-    <name>sfscourse</name>
-    <description>sfscourse</description>
+    <name>sfs-course</name>
+    <description>sfs-course</description>
 
     <properties>
         <java.version>1.8</java.version>
         <swagger.version>2.8.0</swagger.version>
         <jwt.version>0.9.1</jwt.version>
+        <docker.image.prefix>liaowm5</docker.image.prefix>
+        <skipTests>true</skipTests>
     </properties>
 
     <dependencies>
@@ -112,6 +114,24 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
+            <!-- Docker maven plugin -->
+            <plugin>
+                <groupId>com.spotify</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <version>1.0.0</version>
+                <configuration>
+                    <imageName>${docker.image.prefix}/${project.artifactId}-server</imageName>
+                    <dockerDirectory>src/main/docker</dockerDirectory>
+                    <resources>
+                        <resource>
+                            <targetPath>/</targetPath>
+                            <directory>${project.build.directory}</directory>
+                            <include>${project.build.finalName}.jar</include>
+                        </resource>
+                    </resources>
+                </configuration>
+            </plugin>
+            <!-- Docker maven plugin -->
         </plugins>
     </build>
 
